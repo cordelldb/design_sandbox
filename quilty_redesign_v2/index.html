@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fffdf9" />
+    <title>Quilty — Get the read before your script gets read</title>
+    <meta
+      name="description"
+      content="AI script coverage for film and TV writers. Quilty reads your screenplay like a development executive and returns industry-standard coverage plus the 0–100 Quilty Score, usually in about an hour."
+    />
+    <script>document.documentElement.classList.add('js')</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400..700&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+
+    <!-- ============================================================ NAV (floating pill) -->
+    <header class="nav" id="nav">
+      <div class="nav-pill">
+        <a class="brand" href="/" aria-label="Quilty home">
+          <span class="brand-logo"><img src="/quilty-logo.png" alt="Quilty" width="1024" height="474" /></span>
+          <span class="brand-tag">Film &amp; TV</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary">
+          <a href="#how">How it works</a>
+          <a href="#score">The Score</a>
+          <a href="#discovery">Discovery</a>
+          <div class="nav-menu">
+            <button type="button" class="nav-menu-btn" aria-haspopup="true" aria-expanded="false">
+              Industry
+              <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="nav-dropdown">
+              <p class="nav-dropdown-label">For producers &amp; executives</p>
+              <a href="#">Market &amp; comparable-title research</a>
+              <a href="#">Casting suggestions</a>
+              <a href="#">Budget &amp; risk alerts</a>
+              <a href="#">Production breakdowns</a>
+            </div>
+          </div>
+          <a href="https://quilty.app/pricing">Pricing</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="nav-signin" href="https://quilty.app/login">Sign in</a>
+          <a class="btn btn-primary btn-sm" href="https://quilty.app/pricing">Get my analysis</a>
+          <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navMobile">
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-mobile" id="navMobile">
+        <a href="#how">How it works</a>
+        <a href="#score">The Score</a>
+        <a href="#discovery">Discovery Network</a>
+        <a href="#">Industry</a>
+        <a href="https://quilty.app/pricing">Pricing</a>
+        <a href="https://quilty.app/login">Sign in</a>
+        <a class="btn btn-primary" href="https://quilty.app/pricing">Get my analysis</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ============================================================ HERO -->
+      <section class="hero">
+        <div class="container hero-head">
+          <p class="kicker reveal">
+            <span class="kicker-tag">AI script coverage</span>
+            <span>Entertainment&rsquo;s intelligence platform</span>
+          </p>
+          <h1 class="hero-title reveal">Get <em>the read</em> before your script gets&nbsp;read.</h1>
+          <p class="hero-lede reveal">
+            Quilty reads your screenplay the way a development executive would, then returns
+            industry-standard coverage &mdash; logline, synopsis, characters, tone, structure and
+            market fit &mdash; scored from 0 to 100. Most analyses are ready in about an hour.
+          </p>
+          <div class="ctas reveal">
+            <a class="btn btn-primary btn-lg" href="https://quilty.app/pricing">
+              Choose a plan
+              <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
+            <a class="btn btn-quiet btn-lg" href="https://quilty.app/report/ferris-buellers-day-off-sample">Open the sample report</a>
+          </div>
+          <p class="hero-note reveal">Personal and Slate include full analyses every month.</p>
+        </div>
+
+        <!-- The hour, visualized -->
+        <div class="container">
+          <div class="console reveal" id="console" aria-label="Animated example of a Quilty analysis: a 112-page script is read pass by pass and coverage is ready at minute 54, with a Quilty Score of 87." role="img">
+            <div class="console-bar" aria-hidden="true">
+              <span class="console-live"><i></i><span id="consoleStatus">Reading your script</span></span>
+              <span class="console-time">Elapsed <b id="consoleClock">00:00</b></span>
+              <button class="console-replay" id="consoleReplay" type="button" tabindex="-1">
+                <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5" /></svg>
+                Replay
+              </button>
+            </div>
+
+            <div class="console-grid" aria-hidden="true">
+              <!-- Title page with brass brads -->
+              <div class="title-page">
+                <span class="brad brad-top"></span>
+                <span class="hole"></span>
+                <span class="brad brad-bottom"></span>
+                <div class="tp-center">
+                  <p class="tp-title">SMALL HOURS</p>
+                  <p>Written by</p>
+                  <p>J. Avery</p>
+                </div>
+                <p class="tp-foot">Draft 4<br />112 pages</p>
+              </div>
+
+              <!-- Passes -->
+              <ol class="passes" id="passes">
+                <li><time>00:00</time><span class="p-dot"></span><b>Script received</b><span class="p-sub">112 pages &middot; Final Draft</span></li>
+                <li><time>00:07</time><span class="p-dot"></span><b>Story &amp; structure</b><span class="p-sub">Acts and beats mapped by page</span></li>
+                <li><time>00:19</time><span class="p-dot"></span><b>Characters &amp; dialogue</b><span class="p-sub">Leads, wants and voice</span></li>
+                <li><time>00:31</time><span class="p-dot"></span><b>Tone, genre &amp; visuals</b><span class="p-sub">How it plays on the page</span></li>
+                <li><time>00:40</time><span class="p-dot"></span><b>Market &amp; comparables</b><span class="p-sub">Audience, comps and fit</span></li>
+                <li><time>00:48</time><span class="p-dot"></span><b>Production reality</b><span class="p-sub">Budget tier, locations, cast</span></li>
+                <li><time>00:54</time><span class="p-dot"></span><b>Coverage ready</b><span class="p-sub">Waiting in your account</span></li>
+              </ol>
+
+              <!-- Result -->
+              <div class="result" id="result">
+                <div class="result-head">
+                  <span class="mono">Coverage &middot; Small Hours</span>
+                </div>
+                <div class="result-score">
+                  <div class="ring">
+                    <svg viewBox="0 0 120 120">
+                      <circle class="ring-track" cx="60" cy="60" r="52" />
+                      <circle class="ring-fill" cx="60" cy="60" r="52" pathLength="100" style="--v: 87" />
+                    </svg>
+                    <div class="ring-label"><strong id="resultScore">87</strong><span>Quilty Score</span></div>
+                  </div>
+                  <span class="stamp">Recommend</span>
+                </div>
+                <p class="result-log">
+                  <span class="mono">Logline</span>
+                  A night-shift radio host in a dying mill town takes a call from a listener who
+                  claims to be her missing sister.
+                </p>
+                <ul class="result-pillars">
+                  <li style="--v: 90"><span>Story &amp; Craft</span><b>90</b><i></i></li>
+                  <li style="--v: 82"><span>Commercial</span><b>82</b><i></i></li>
+                  <li style="--v: 89"><span>Cultural</span><b>89</b><i></i></li>
+                  <li style="--v: 86"><span>Production</span><b>86</b><i></i></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <ul class="proof reveal">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>Full analysis in about an hour</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z" /><path d="M14 3v5h5M10 13h6M10 17h4" /></svg>Industry-standard format</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>100% confidential</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============================================================ COVERAGE, EXPLAINED -->
+      <section class="section" id="coverage">
+        <div class="container">
+          <p class="eyebrow reveal"><span class="eyebrow-num">01</span>Script coverage, explained</p>
+          <p class="statement reveal">
+            Coverage is the written evaluation a reader prepares before a screenplay moves up the
+            chain: a logline, a synopsis, notes on story, character and structure, and a verdict
+            &mdash; <span class="verdict-word">pass</span>, <span class="verdict-word">consider</span>
+            or <span class="verdict-word is-red">recommend</span>. It&rsquo;s how agencies, studios,
+            managers and contests decide what gets read&nbsp;next.
+          </p>
+
+          <div class="markup-wrap">
+            <div class="markup-intro reveal">
+              <h2 class="h2">Traditional coverage, with our&nbsp;notes.</h2>
+              <p class="body">
+                Traditional coverage typically costs $75&ndash;$150 and takes one to two weeks.
+                Quilty delivers the same industry-standard format in about an hour &mdash; and shows
+                the reasoning behind every note. It&rsquo;s built for film, TV and stage writers, and
+                for the producers who buy their work.
+              </p>
+              <div class="link-stack">
+                <a class="text-link" href="https://quilty.app/sample-report">See a full coverage example <span aria-hidden="true">&rarr;</span></a>
+                <a class="text-link" href="https://quilty.app/docs/report-guide">How each section is built <span aria-hidden="true">&rarr;</span></a>
+                <a class="text-link" href="https://quilty.app/why-quilty">Compare coverage services in detail <span aria-hidden="true">&rarr;</span></a>
+              </div>
+            </div>
+
+            <div class="markup reveal" id="markup">
+              <div class="markup-head">
+                <span class="mono">Traditional coverage</span>
+                <span class="markup-pen">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" /></svg>
+                  Notes by Quilty
+                </span>
+              </div>
+              <dl>
+                <div class="mk-row">
+                  <dt>Turnaround</dt>
+                  <dd>
+                    <span class="mk-old"><span class="sr-only">Traditional: </span>One to two weeks</span>
+                    <span class="mk-new"><span class="sr-only">Quilty: </span>About an hour</span>
+                  </dd>
+                </div>
+                <div class="mk-row">
+                  <dt>Cost</dt>
+                  <dd>
+                    <span class="mk-old"><span class="sr-only">Traditional: </span>Commonly $75&ndash;$150 per read</span>
+                    <span class="mk-new"><span class="sr-only">Quilty: </span>$49.99 per full feature analysis, or plans from $39.99/mo for two</span>
+                  </dd>
+                </div>
+                <div class="mk-row">
+                  <dt>Format</dt>
+                  <dd>
+                    <span class="mk-keep"><span class="sr-only">Traditional: </span>Logline, synopsis, comments, verdict</span>
+                    <span class="mk-new mk-insert"><span class="sr-only">Quilty adds: </span>plus the 0&ndash;100 Quilty Score</span>
+                  </dd>
+                </div>
+                <div class="mk-row">
+                  <dt>Consistency</dt>
+                  <dd>
+                    <span class="mk-old"><span class="sr-only">Traditional: </span>Varies from reader to reader</span>
+                    <span class="mk-new"><span class="sr-only">Quilty: </span>The same framework, every read</span>
+                  </dd>
+                </div>
+                <div class="mk-row">
+                  <dt>Market read</dt>
+                  <dd>
+                    <span class="mk-old"><span class="sr-only">Traditional: </span>Rarely included</span>
+                    <span class="mk-new"><span class="sr-only">Quilty: </span>Comparable titles and market fit, included</span>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ ANATOMY OF A REPORT -->
+      <section class="section section-paper" id="report">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal"><span class="eyebrow-num">02</span>What you get</p>
+            <h2 class="h2 reveal">Six chapters. Zero&nbsp;platitudes.</h2>
+            <p class="body-lg reveal">
+              Every Quilty report is built to the same spec &mdash; comprehensive, specific, and
+              written in the language of professional Hollywood coverage. Scroll the anatomy.
+            </p>
+          </div>
+
+          <div class="anatomy">
+            <div class="anatomy-doc">
+              <div class="doc" id="doc" aria-hidden="true">
+                <div class="doc-head">
+                  <div>
+                    <span class="mono">Coverage report</span>
+                    <p class="doc-title">Small Hours</p>
+                    <p class="doc-meta">Feature &middot; Drama / Mystery &middot; 112 pp</p>
+                  </div>
+                  <span class="stamp stamp-sm">Recommend</span>
+                </div>
+
+                <div class="doc-part" data-part="0">
+                  <span class="doc-tag">01</span>
+                  <span class="mono">Verdict &amp; logline</span>
+                  <p class="doc-text">A night-shift radio host in a dying mill town takes a call from a listener who claims to be her missing sister.</p>
+                </div>
+
+                <div class="doc-part" data-part="1">
+                  <span class="doc-tag">02</span>
+                  <span class="mono">Synopsis &amp; story facts</span>
+                  <span class="skel" style="--w: 96%"></span>
+                  <span class="skel" style="--w: 88%"></span>
+                  <span class="skel" style="--w: 64%"></span>
+                  <span class="chips"><span>112 pages</span><span>Drama / Mystery</span><span>Mill town, present day</span></span>
+                </div>
+
+                <div class="doc-part" data-part="2">
+                  <span class="doc-tag">03</span>
+                  <span class="mono">Concept &amp; structure</span>
+                  <div class="beats">
+                    <span style="--s: 0; --e: 26">Act I</span>
+                    <span style="--s: 26; --e: 54">Act IIa</span>
+                    <span style="--s: 54; --e: 86">Act IIb</span>
+                    <span style="--s: 86; --e: 100">Act III</span>
+                  </div>
+                  <div class="beat-marks">
+                    <span style="--at: 11">Inciting &middot; p.12</span>
+                    <span style="--at: 50">Midpoint &middot; p.56</span>
+                    <span style="--at: 88">Climax &middot; p.98</span>
+                  </div>
+                </div>
+
+                <div class="doc-part" data-part="3">
+                  <span class="doc-tag">04</span>
+                  <span class="mono">Characters &amp; dialogue</span>
+                  <ul class="cast">
+                    <li><b>NORA</b><span>Lead &mdash; wants her sister back</span></li>
+                    <li><b>CAL</b><span>Station owner &mdash; wants out</span></li>
+                    <li><b>JUNE</b><span>The caller &mdash; wants to be believed</span></li>
+                  </ul>
+                </div>
+
+                <div class="doc-part" data-part="4">
+                  <span class="doc-tag">05</span>
+                  <span class="mono">Tone, genre &amp; visuals</span>
+                  <span class="chips chips-tone"><span>Melancholic</span><span>Tense</span><span>Intimate</span></span>
+                </div>
+
+                <div class="doc-part" data-part="5">
+                  <span class="doc-tag">06</span>
+                  <span class="mono">Market &amp; next steps</span>
+                  <p class="doc-text"><span class="fix">Fix first</span> Sharpen the midpoint reversal so Act IIb accelerates.</p>
+                </div>
+              </div>
+            </div>
+
+            <ol class="anatomy-list" id="anatomyList">
+              <li data-part="0">
+                <span class="a-num">01</span>
+                <h3>Verdict &amp; logline</h3>
+                <p>The reader&rsquo;s call on your draft, plus a one-line pitch you can put to work today.</p>
+              </li>
+              <li data-part="1">
+                <span class="a-num">02</span>
+                <h3>Synopsis &amp; story facts</h3>
+                <p>Your story told back to you, with page count, genre blend and setting at a glance.</p>
+              </li>
+              <li data-part="2">
+                <span class="a-num">03</span>
+                <h3>Concept &amp; structure</h3>
+                <p>The hook, the themes, and exactly where each act and story beat lands &mdash; by page.</p>
+              </li>
+              <li data-part="3">
+                <span class="a-num">04</span>
+                <h3>Characters &amp; dialogue</h3>
+                <p>Who drives the story, what each lead wants, and how the dialogue plays.</p>
+              </li>
+              <li data-part="4">
+                <span class="a-num">05</span>
+                <h3>Tone, genre &amp; visuals</h3>
+                <p>How the script feels on the page, and how well it tells the story in pictures.</p>
+              </li>
+              <li data-part="5">
+                <span class="a-num">06</span>
+                <h3>Market &amp; next steps</h3>
+                <p>Where the project sits in today&rsquo;s market &mdash; and what to fix first.</p>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Full analysis: four chapters -->
+          <div class="deeper reveal">
+            <div class="deeper-head">
+              <div>
+                <p class="eyebrow eyebrow-red">Full analysis</p>
+                <h3 class="h3-display">Then go deeper than coverage ever&nbsp;does.</h3>
+              </div>
+              <p class="body">
+                The full analysis adds the 0&ndash;100 Quilty Score and four chapters most readers never
+                touch &mdash; each one scored, charted and explained.
+              </p>
+            </div>
+
+            <div class="chapters">
+              <article class="chapter">
+                <span class="mono">Audience</span>
+                <svg class="ch-viz" viewBox="0 0 200 60" aria-hidden="true">
+                  <path class="ch-area" d="M0 50 C 20 44, 30 30, 50 34 S 80 46, 100 28 S 130 8, 145 12 S 170 36, 200 22 L200 60 L0 60Z" />
+                  <path class="ch-line" d="M0 50 C 20 44, 30 30, 50 34 S 80 46, 100 28 S 130 8, 145 12 S 170 36, 200 22" />
+                  <circle cx="143" cy="11.5" r="3.5" class="ch-dot" />
+                </svg>
+                <p>Who it plays to, and the tension each scene builds.</p>
+              </article>
+              <article class="chapter">
+                <span class="mono">Market</span>
+                <div class="ch-comps" aria-hidden="true">
+                  <span>Comparable titles</span><span>Market fit</span><span>Positioning</span>
+                </div>
+                <p>Where the project sits in today&rsquo;s marketplace.</p>
+              </article>
+              <article class="chapter">
+                <span class="mono">Money</span>
+                <div class="ch-tier-wrap" aria-hidden="true">
+                  <div class="ch-tier">
+                    <span></span><span class="is-on">Low</span><span></span><span></span><span></span>
+                  </div>
+                  <div class="ch-tier-scale"><span>Micro</span><span>Tentpole</span></div>
+                </div>
+                <p>The budget tier and the financial picture behind it.</p>
+              </article>
+              <article class="chapter">
+                <span class="mono">Production</span>
+                <div class="ch-counts" aria-hidden="true">
+                  <span><b>14</b>Locations</span><span><b>22</b>Speaking roles</span><span><b>9</b>Night exts.</span>
+                </div>
+                <p>How producible the script is as written.</p>
+              </article>
+            </div>
+
+            <div class="deeper-foot">
+              <div class="price-line">
+                <span class="price">$49.99</span>
+                <span class="price-note">one time &mdash; or included<br />with Personal and Slate</span>
+              </div>
+              <div class="ctas">
+                <a class="btn btn-primary" href="https://quilty.app/pricing">Get my analysis</a>
+                <a class="text-link" href="https://quilty.app/pricing">See pricing <span aria-hidden="true">&rarr;</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ HOW IT WORKS -->
+      <section class="section" id="how">
+        <div class="container">
+          <div class="section-head section-head-split">
+            <div>
+              <p class="eyebrow reveal"><span class="eyebrow-num">03</span>How it works</p>
+              <h2 class="h2 reveal">Three steps. Roughly sixty&nbsp;minutes.</h2>
+            </div>
+            <a class="btn btn-quiet reveal" href="https://quilty.app/pricing">Start with a plan</a>
+          </div>
+
+          <ol class="steps">
+            <li class="step reveal">
+              <span class="step-num" aria-hidden="true">1</span>
+              <span class="step-time">Minute 0</span>
+              <h3>Choose a plan</h3>
+              <p>Personal and Slate include full analyses every month. Just need one? A single full analysis is on the same page.</p>
+            </li>
+            <li class="step reveal">
+              <span class="step-num" aria-hidden="true">2</span>
+              <span class="step-time">Minute 1</span>
+              <h3>Upload your script</h3>
+              <p>PDF, Final Draft, Word or plain text, up to 50&nbsp;MB. Quilty reads it like a development exec: story, character, craft and market.</p>
+              <span class="formats" aria-label="Accepted formats"><span>PDF</span><span>FDX</span><span>DOCX</span><span>TXT</span></span>
+            </li>
+            <li class="step reveal">
+              <span class="step-num" aria-hidden="true">3</span>
+              <span class="step-time">About an hour</span>
+              <h3>Read your full analysis</h3>
+              <p>It lands in your account, and we&rsquo;ll email you the moment it&rsquo;s ready.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ============================================================ QUILTY SCORE -->
+      <section class="section section-paper" id="score">
+        <div class="container score-grid">
+          <div class="score-copy">
+            <p class="eyebrow reveal"><span class="eyebrow-num">04</span>The Quilty Score</p>
+            <h2 class="h2 reveal">A score you can actually act&nbsp;on.</h2>
+            <p class="body-lg reveal">
+              Every full analysis opens with the Quilty Score &mdash; a transparent, four-pillar
+              evaluation that goes far beyond pass, consider or recommend. It&rsquo;s built for writers,
+              producers and executives alike, and included with Personal, Slate and every one-time
+              full analysis.
+            </p>
+            <ul class="checks reveal">
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Industry-standard formatting</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Specific, actionable notes &mdash; never platitudes</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Honest &mdash; it won&rsquo;t just tell you what you want to hear</li>
+            </ul>
+            <div class="link-stack reveal">
+              <a class="text-link" href="https://quilty.app/sample-report">See a full sample report <span aria-hidden="true">&rarr;</span></a>
+              <a class="text-link" href="https://quilty.app/quilty-score/best-films">How the score tracks critic consensus across 50 acclaimed films <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </div>
+
+          <div class="lab reveal" id="lab">
+            <div class="lab-top">
+              <div class="seg" role="tablist" aria-label="Sample scripts">
+                <button role="tab" aria-selected="true" data-script="0">
+                  <b>The Quiet Year</b><span>Drama</span>
+                </button>
+                <button role="tab" aria-selected="false" tabindex="-1" data-script="1">
+                  <b>Double Booked</b><span>Comedy</span>
+                </button>
+              </div>
+              <div class="lab-total">
+                <strong id="labTotal">82</strong>
+                <span>Quilty Score</span>
+              </div>
+            </div>
+
+            <ul class="lab-pillars" id="labPillars">
+              <li>
+                <div><h3>Story &amp; Craft</h3><p>Structure, character, dialogue, scene work &mdash; the fundamentals on the page.</p></div>
+                <span class="lab-bar"><i></i></span><b>&ndash;</b>
+              </li>
+              <li>
+                <div><h3>Commercial Viability</h3><p>Genre, audience, hook, and how it lands in today&rsquo;s marketplace.</p></div>
+                <span class="lab-bar"><i></i></span><b>&ndash;</b>
+              </li>
+              <li>
+                <div><h3>Cultural Resonance</h3><p>What the story says, who it&rsquo;s for, and why it matters right now.</p></div>
+                <span class="lab-bar"><i></i></span><b>&ndash;</b>
+              </li>
+              <li>
+                <div><h3>Production Reality</h3><p>Budget tier, locations, cast complexity &mdash; how producible it is as written.</p></div>
+                <span class="lab-bar"><i></i></span><b>&ndash;</b>
+              </li>
+            </ul>
+
+            <p class="lab-foot">
+              <span class="fix" id="labFix">Fix first &middot; Commercial Viability</span>
+              <span>Same score, different scripts. The pillars tell you what to work on.</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ WRITERS (index cards) -->
+      <section class="section" id="writers">
+        <div class="container">
+          <div class="section-head section-head-center">
+            <p class="eyebrow reveal"><span class="eyebrow-num">05</span>From writers</p>
+            <h2 class="h2 reveal">The notes writers keep talking&nbsp;about.</h2>
+            <p class="body-lg reveal">
+              Writers say Quilty&rsquo;s feedback is more thorough &mdash; and more honest &mdash; than
+              coverage they&rsquo;ve paid hundreds for elsewhere.
+            </p>
+          </div>
+
+          <div class="cards">
+            <figure class="card reveal">
+              <blockquote>&ldquo;I&rsquo;m hoping you disrupt The Black List. Their evaluations feel wildly inconsistent and subjective&hellip; Your evaluations coming in at a lower price is already an advantage. It&rsquo;s impressive.&rdquo;</blockquote>
+              <figcaption><b>Luke</b><span>Watson Way &middot; March 31, 2026</span></figcaption>
+            </figure>
+            <figure class="card card-feature reveal">
+              <blockquote>&ldquo;It was definitely an interesting experience. The feedback is actually so thorough that I haven&rsquo;t had a chance to go through it all yet. One thing I will say is that it did <span class="hl">NOT just tell me what I wanted to hear</span> which, while maybe ego damaging, made me feel more confident in the feedback.&rdquo;</blockquote>
+              <figcaption><b>Mickey</b><span>Writer &middot; April 2, 2026</span></figcaption>
+            </figure>
+            <figure class="card reveal">
+              <blockquote>&ldquo;I really like your site because it provides detailed and actionable feedback in many areas, and it has helped me to significantly improve my script at a reasonable price. Thanks for having such a helpful resource.&rdquo;</blockquote>
+              <figcaption><b>Adam Lamparello</b><span>Screenwriter &middot; April 5, 2026</span></figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ DISCOVERY (ticket) -->
+      <section class="section section-paper" id="discovery">
+        <div class="container disc-grid">
+          <div class="disc-visual reveal" aria-hidden="true">
+            <div class="ticket ticket-back"></div>
+            <div class="ticket">
+              <div class="ticket-main">
+                <span class="t-top">Discovery Network &middot; Admit one</span>
+                <span class="t-title">Small Hours</span>
+                <span class="t-meta">Feature &middot; Drama / Mystery &middot; by J. Avery</span>
+                <div class="t-rows">
+                  <span><small>Quilty Score</small><b>87</b></span>
+                  <span><small>Verdict</small><b>Recommend</b></span>
+                  <span><small>Status</small><b>Listed</b></span>
+                </div>
+              </div>
+              <div class="ticket-stub">
+                <span class="t-stub-label">Score</span>
+                <span class="t-stub-score">87</span>
+                <span class="barcode"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="disc-copy">
+            <p class="eyebrow reveal"><span class="eyebrow-num">06</span>Discovery Network</p>
+            <h2 class="h2 reveal">Your score is your ticket. <em>Discovery is the destination.</em></h2>
+            <p class="body-lg reveal">
+              A full analysis gives your script a Quilty Score. While Personal or Slate is active, you
+              can list any scored script on Discovery &mdash; and it stays listed for as long as your
+              plan does.
+            </p>
+            <ul class="disc-points">
+              <li class="reveal">
+                <h3>List your script</h3>
+                <p>Opt in from any scored report. Use a pen name if you prefer, and leave anytime.</p>
+              </li>
+              <li class="reveal">
+                <h3>Bank two analyses a month</h3>
+                <p>Personal includes two full analyses monthly. Unused credits roll over to your next draft.</p>
+              </li>
+              <li class="reveal">
+                <h3>Keep 100% of your deal</h3>
+                <p>Quilty makes the connection. The negotiation is yours &mdash; we never take a cut.</p>
+              </li>
+            </ul>
+            <div class="ctas reveal">
+              <a class="btn btn-primary" href="https://quilty.app/pricing">See plans</a>
+              <a class="btn btn-quiet" href="https://quilty.app/discovery">Explore the Discovery Network</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ FAQ (master–detail) -->
+      <section class="section" id="faq">
+        <div class="container">
+          <div class="section-head section-head-split">
+            <div>
+              <p class="eyebrow reveal"><span class="eyebrow-num">07</span>FAQ</p>
+              <h2 class="h2 reveal">Before you&nbsp;upload.</h2>
+            </div>
+            <p class="body reveal faq-contact">Straight answers to the questions writers ask most before they hand over a draft.</p>
+          </div>
+
+          <div class="faq reveal" id="faq-list">
+            <button class="faq-q" style="--r: 1" id="fq1" aria-controls="fa1" aria-expanded="true">What is script coverage?</button>
+            <div class="faq-a" id="fa1" role="region" aria-labelledby="fq1">
+              <p class="faq-a-q">What is script coverage?</p>
+              <p>Script coverage is the written evaluation a reader prepares before a screenplay moves up the chain. It includes a logline, a synopsis, notes on story, character and structure, and a verdict: pass, consider or recommend. Agencies, studios, managers and contests use it to decide which scripts get read next.</p>
+            </div>
+
+            <button class="faq-q" style="--r: 2" id="fq2" aria-controls="fa2" aria-expanded="false">How much does script coverage cost?</button>
+            <div class="faq-a" id="fa2" role="region" aria-labelledby="fq2">
+              <p class="faq-a-q">How much does script coverage cost?</p>
+              <p>Traditional coverage commonly runs $75&ndash;$150 per script. A full Quilty feature analysis is $49.99, and plans start at $39.99/month, billed monthly, for two analyses.</p>
+              <a class="text-link" href="https://quilty.app/pricing">See pricing <span aria-hidden="true">&rarr;</span></a>
+            </div>
+
+            <button class="faq-q" style="--r: 3" id="fq3" aria-controls="fa3" aria-expanded="false">Is my script safe?</button>
+            <div class="faq-a" id="fa3" role="region" aria-labelledby="fq3">
+              <p class="faq-a-q">Is my script safe?</p>
+              <p>Yes. Your upload travels over TLS, and both the manuscript and the original file are encrypted again before they&rsquo;re stored &mdash; using authenticated encryption, with keys kept separate from database backups. Coverage providers see your script only to write your report, and they don&rsquo;t train on it. You keep full ownership.</p>
+            </div>
+
+            <button class="faq-q" style="--r: 4" id="fq4" aria-controls="fa4" aria-expanded="false">How is this different from a human reader?</button>
+            <div class="faq-a" id="fa4" role="region" aria-labelledby="fq4">
+              <p class="faq-a-q">How is this different from a human reader?</p>
+              <p>Quilty reads with the rigor and vocabulary of a seasoned development executive, but delivers in about an hour instead of weeks, at a fraction of the cost. Many writers use both: Quilty for fast iteration between drafts, and human readers for the final pass.</p>
+            </div>
+
+            <button class="faq-q" style="--r: 5" id="fq5" aria-controls="fa5" aria-expanded="false">What format is the report?</button>
+            <div class="faq-a" id="fa5" role="region" aria-labelledby="fq5">
+              <p class="faq-a-q">What format is the report?</p>
+              <p>Your coverage lives in your Quilty account, laid out the way studio readers write it. A full analysis includes the verdict, logline, story and character notes, market fit, the Quilty Score, and chapters on audience, market, money and production. Download it as a PDF anytime. Personal and Slate include full analyses every month, or you can buy a single analysis on its own.</p>
+            </div>
+
+            <button class="faq-q" style="--r: 6" id="fq6" aria-controls="fa6" aria-expanded="false">Can I share it with producers?</button>
+            <div class="faq-a" id="fa6" role="region" aria-labelledby="fq6">
+              <p class="faq-a-q">Can I share it with producers?</p>
+              <p>Absolutely &mdash; the report is yours. Many writers attach it to query letters and pitch decks as a signal of credibility.</p>
+            </div>
+
+            <button class="faq-q" style="--r: 7" id="fq7" aria-controls="fa7" aria-expanded="false">How accurate is the AI?</button>
+            <div class="faq-a" id="fa7" role="region" aria-labelledby="fq7">
+              <p class="faq-a-q">How accurate is the AI?</p>
+              <p>Quilty is calibrated against industry coverage standards. It won&rsquo;t tell you what you want to hear &mdash; and that&rsquo;s the point. Every read is honest, specific and consistently formatted.</p>
+            </div>
+
+            <button class="faq-q" style="--r: 8" id="fq8" aria-controls="fa8" aria-expanded="false">What file types do you accept?</button>
+            <div class="faq-a" id="fa8" role="region" aria-labelledby="fq8">
+              <p class="faq-a-q">What file types do you accept?</p>
+              <p>PDF, Final Draft (.fdx), Word (.docx) and plain text (.txt), up to 50&nbsp;MB.</p>
+            </div>
+
+            <div class="faq-help">
+              <span class="faq-help-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z" /><path d="M4 7l8 6 8-6" /></svg></span>
+              <p><b>Still have a question?</b> Our team reads every message.</p>
+              <a class="text-link" href="mailto:support@quilty.app">support@quilty.app</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ FINAL CTA (last page) -->
+      <section class="cta-band">
+        <div class="container">
+          <div class="last-page reveal">
+            <span class="brad brad-top" aria-hidden="true"></span>
+            <span class="hole" aria-hidden="true"></span>
+            <span class="brad brad-bottom" aria-hidden="true"></span>
+            <p class="fade-out" aria-hidden="true">FADE OUT.</p>
+            <p class="eyebrow eyebrow-red">Full analysis</p>
+            <h2 class="h2">Get the complete read on your&nbsp;script.</h2>
+            <p class="body-lg">
+              The Quilty Score plus chapters on audience, market, money and production. Personal and
+              Slate include full analyses every month &mdash; or buy a single analysis on its own.
+            </p>
+            <div class="ctas">
+              <a class="btn btn-primary btn-lg" href="https://quilty.app/pricing">
+                Get my analysis
+                <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </a>
+              <a class="btn btn-quiet btn-lg" href="https://quilty.app/sample-report">See a sample report</a>
+            </div>
+            <p class="secure">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+              Encrypted before it&rsquo;s stored. Used only to write your coverage. Never used for training.
+            </p>
+            <p class="the-end" aria-hidden="true">THE END</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================================================ FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a class="brand" href="/" aria-label="Quilty home">
+              <span class="brand-logo"><img src="/quilty-logo.png" alt="Quilty" width="1024" height="474" /></span>
+              <span class="brand-tag">Film &amp; TV</span>
+            </a>
+            <p>AI script coverage and market analysis for film and TV writers.</p>
+            <div class="footer-social">
+              <a href="https://www.facebook.com/profile.php?id=61574349313697" aria-label="Quilty on Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5V7c0-.8.5-1 1-1h2V2.5h-2.8C11 2.5 10 4.6 10 6.8v1.7H7.5V12H10v9.5h4V12h2.7l.4-3.5z" /></svg>
+              </a>
+              <a href="https://www.instagram.com/quiltyllc/" aria-label="Quilty on Instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="ig"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="1" class="ig-dot" /></svg>
+              </a>
+            </div>
+          </div>
+          <nav class="footer-cols" aria-label="Footer">
+            <div>
+              <p class="footer-h">Product</p>
+              <a href="https://quilty.app/pricing">Full Analysis</a>
+              <a href="https://quilty.app/pricing">Pricing</a>
+              <a href="https://quilty.app/quilty-score">Quilty Score</a>
+              <a href="https://quilty.app/sample-report">Sample Report</a>
+            </div>
+            <div>
+              <p class="footer-h">Discovery Network</p>
+              <a href="https://quilty.app/discovery">About the Network</a>
+              <a href="https://quilty.app/dashboard/discovery/leaderboard">Leaderboard</a>
+            </div>
+            <div>
+              <p class="footer-h">Resources</p>
+              <a href="https://quilty.app/blog">Blog</a>
+              <a href="https://quilty.app/help">Help Center</a>
+              <a href="https://quilty.app/docs/report-guide">Glossary</a>
+              <a href="https://quilty.app/docs">Guides</a>
+            </div>
+            <div>
+              <p class="footer-h">Company</p>
+              <a href="https://quilty.app/why-quilty">About</a>
+              <a href="mailto:support@quilty.app">Contact</a>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Quilty. All rights reserved.</p>
+          <div class="footer-legal">
+            <a href="https://quilty.app/terms">Terms</a>
+            <a href="https://quilty.app/privacy">Privacy</a>
+            <a href="https://quilty.app/accessibility">Accessibility</a>
+            <button type="button">Cookie settings</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-mark" aria-hidden="true"><img src="/quilty-logo.png" alt="" width="1024" height="474" /></div>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
